@@ -36,6 +36,6 @@ class AuctionBid(models.Model):
         auction (Auction): auction
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
+    auction = models.ForeignKey(Auction, related_name="bids", on_delete=models.CASCADE)
     price = models.FloatField()
     creation_date = models.DateTimeField(auto_now_add=True)

@@ -18,10 +18,11 @@ class AuctionBidSerializer(serializers.ModelSerializer):
     """
     Serializer for AuctionBid model
     """
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = AuctionBid
-        fields = ("user", "auction", "price", "creation_date")
+        fields = ("user", "auction", "price")
 
 
 class AuctionSerializer(serializers.ModelSerializer):

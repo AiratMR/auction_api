@@ -9,5 +9,9 @@ urlpatterns = [
     path('api/v1/auctions/',  # urls list all and create new one
          views.GetCreateAuctions.as_view(),
          name='GetCreateAuction'
-         )
+         ),
+    path('api/v1/auctionBids/',
+         views.CreateAuctionBid.as_view(),
+         name='CreateAuctionBid'
+         ),
 ]
