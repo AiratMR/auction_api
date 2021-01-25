@@ -15,6 +15,7 @@ class Auction(models.Model):
         creation_date (datetime): auction creation time
         expiration_date (datetime): auction expiration time
         is_closed (bool): auction is closed
+        bids (list): auction bids
     """
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
