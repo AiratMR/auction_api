@@ -26,6 +26,17 @@ class Auction(models.Model):
     expiration_date = models.DateTimeField()
     is_closed = models.BooleanField(default=False)
 
+    @staticmethod
+    def close_action(pk):
+        """
+        Close auction
+        :param pk: auction primary key (id)
+        :return: None
+        """
+        auction = Auction.objects.filter(pk=pk)
+        auction.is_closed = True
+        auction.update()
+
 
 class AuctionBid(models.Model):
     """
@@ -39,3 +50,25 @@ class AuctionBid(models.Model):
     auction = models.ForeignKey(Auction, related_name="bids", on_delete=models.CASCADE)
     price = models.FloatField()
     creation_date = models.DateTimeField(auto_now_add=True)
+
+    @staticmethod
+    def get_last_bid(pk):
+        """
+        Get last auction bid
+        :param pk: auction primary key (id)
+        :return: AuctionBid object
+        """
+        return AuctionBid.objects.filter(auction=pk).latest('creation_date')
+
+    @staticmethod
+    def get_auction_users_emails(pk):
+        """
+        Get users of the auction participants
+        :param pk: auction primary key (id)
+        :return: List of users
+        """
+
+        auction_bids = AuctionBid.objects.filter(auction=pk)
+
+        emails = {auction_bid.user.email for auction_bid in auction_bids}
+        return list(emails)

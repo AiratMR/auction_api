@@ -134,3 +134,15 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {},
 }
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yourmail@mail.ru'
+EMAIL_HOST_PASSWORD = 'password'
+
+# Redis settings
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_BROKER_TRANSPORT = 'redis'

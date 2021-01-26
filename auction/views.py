@@ -1,4 +1,3 @@
-from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, CreateAPIView
 from rest_framework.response import Response
@@ -8,6 +7,7 @@ from .models import Auction, AuctionBid
 from .serializers import AuctionSerializer, AuctionDetailsSerializer, AuctionBidSerializer
 from .permissions import IsOpenAuction, IsNotAuctionOwner
 from .validators import AuctionBidValidator
+from .tasks import send_auction_created_message, send_auction_closed_message, send_new_auction_bid_message
 
 
 class GetAuctions(RetrieveAPIView):
@@ -71,9 +71,14 @@ class GetCreateAuctions(ListCreateAPIView):
         serializer = AuctionSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(creator=request.user)
+            auction = serializer.save(creator=request.user)
+
+            # email notifications
+            send_auction_created_message(auction=auction)
+            send_auction_closed_message(auction=auction)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # todo: оповещение пользователей об открытом аукционе
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -83,7 +88,7 @@ class CreateAuctionBid(CreateAPIView):
 
     def get_queryset(self, auction_pk):
         try:
-            auction_bid = AuctionBid.objects.filter(auction=auction_pk).latest('creation_date')
+            auction_bid = AuctionBid.get_last_bid(auction_pk)
         except AuctionBid.DoesNotExist:
             return None
 
@@ -107,13 +112,16 @@ class CreateAuctionBid(CreateAPIView):
                                                                        new_price,
                                                                        auction.price_step):
                 serializer.save(user=request.user)
+                # email notification
+                send_new_auction_bid_message(auction)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             elif AuctionBidValidator.is_valid_price(last_bid.price,
                                                     new_price,
                                                     auction.price_step):
                 serializer.save(user=request.user)
+                # email notification
+                send_new_auction_bid_message(auction)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        # todo: оповещение пользователей об открытом аукционе
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

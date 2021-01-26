@@ -1,4 +1,6 @@
 django==3.1.5
 djangorestframework==3.12.2
-djangorestframework_simplejwt
-djoser
+djangorestframework_simplejwt==4.6.0
+djoser==2.1.0
+celery==5.0.5
+redis==3.5.3
