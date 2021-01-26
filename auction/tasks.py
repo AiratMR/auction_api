@@ -36,13 +36,12 @@ def send_auction_created_task(auction_name, description, starting_price, price_s
     send_mail(
         'New auction',
         str.format("""
-        New auction - {0}:
-        
-        {1}
-        Starting price: {2}
-        Price step: {3}
-        
-        """, auction_name, description, starting_price, price_step),
+            New auction - {0}:
+            
+            {1}
+            Starting price: {2},
+            Price step: {3}.
+            """, auction_name, description, starting_price, price_step),
         EMAIL_HOST_USER,
         receivers
     )
@@ -74,23 +73,23 @@ def send_auction_closed_task(auction_id):
     last_bid = AuctionBid.get_last_bid(auction_id)
 
     send_mail(
-        'Auction closed',
+        'Auction closed.',
         str.format("""
-            You won auction {0}:
+            You won auction - {0}:
 
-            Price: {1}
+            Total price: {1}.
             """, last_bid.auction.name, last_bid.price),
         EMAIL_HOST_USER,
         [last_bid.user.email]
     )
 
     send_mail(
-        'Auction closed',
+        'Auction closed.',
         str.format("""
-               Auction for goods {0} is closed
-
-               Price: {1}
-               """, last_bid.auction.name, last_bid.price),
+           Auction for goods - {0} is closed.
+    
+           Total price: {1}.
+           """, last_bid.auction.name, last_bid.price),
         EMAIL_HOST_USER,
         AuctionBid.get_auction_users_emails(auction_id)
     )
@@ -116,12 +115,12 @@ def send_new_auction_bid_task(auction_id):
     last_bid = AuctionBid.get_last_bid(auction_id)
 
     send_mail(
-        'New auction bid',
+        'New auction bid.',
         str.format("""
-                   New bid for goods {0}
+           New bid for goods - {0}.
 
-                   New price: {1}
-                   """, last_bid.auction.name, last_bid.price),
+           New price: {1}.
+           """, last_bid.auction.name, last_bid.price),
         EMAIL_HOST_USER,
         AuctionBid.get_auction_users_emails(auction_id)
     )
