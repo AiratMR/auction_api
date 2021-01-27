@@ -26,10 +26,7 @@ class GetAuctions(RetrieveAPIView):
 
     def get(self, request, pk):
         """
-        Get action details bu id
-        :param request: request object
-        :param pk: primary key (id)
-        :return: serialized Auction object
+        Get action details by id.
         """
         auction = self.get_queryset(pk)
         serializer = AuctionDetailsSerializer(auction)
@@ -46,9 +43,7 @@ class GetCreateAuctions(ListCreateAPIView):
 
     def get(self, request):
         """
-        Get all auctions
-        :param request: request object
-        :return: Serialized Auction list
+        Get all auctions.
         """
         auctions = self.get_queryset()
         auction_status = self.request.query_params.get('status', None)
@@ -64,9 +59,7 @@ class GetCreateAuctions(ListCreateAPIView):
 
     def post(self, request):
         """
-        Create auction
-        :param request: request object
-        :return: Response
+        Create new auction.
         """
         serializer = AuctionSerializer(data=request.data)
 
@@ -96,9 +89,7 @@ class CreateAuctionBid(CreateAPIView):
 
     def post(self, request):
         """
-        Create new bid
-        :param request: request object
-        :return: Response
+        Create new bid.
         """
         auction_id = int(request.data.get("auction"))
         new_price = float(request.data.get("price"))
