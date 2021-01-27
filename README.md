@@ -22,7 +22,7 @@ EMAIL_HOST_PASSWORD = 'password'
 ## Документация
 
 Документация доступна после запуска приложения по ссылкам:
-  http://localhost/swagger.json
-  http://localhost/swagger.yaml
-  http://localhost/swagger/
-  http://localhost/redoc/
+  1. http://localhost/swagger.json
+  2. http://localhost/swagger.yaml
+  3. http://localhost/swagger/
+  4. http://localhost/redoc/
