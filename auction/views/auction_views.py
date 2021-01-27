@@ -8,7 +8,7 @@ from ..serializers import AuctionSerializer, AuctionDetailsSerializer
 from ..tasks import send_auction_created_message, send_auction_closed_message
 
 
-class GetAuctions(RetrieveAPIView):
+class GetAuction(RetrieveAPIView):
     serializer_class = AuctionDetailsSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -42,6 +42,9 @@ class GetCreateAuctions(ListCreateAPIView):
     def get(self, request):
         """
         Get all auctions.
+
+        Query parameters:
+            ?status=open | ?status=closed
         """
         auctions = self.get_queryset()
         auction_status = self.request.query_params.get('status', None)
